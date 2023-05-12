@@ -1,23 +1,17 @@
 import React, { useState, useEffect } from 'react';
-import { useSearchParams, useLocation } from 'react-router-dom'; 
+import { useSearchParams } from 'react-router-dom'; 
 import { toast } from 'react-hot-toast'; 
 import { fetchMovieByName } from '../services/api';
 import SearchMovies from '../components/SearchMovies/SearchMovies';
-import {
-  List,
-  ListItem,
-  SectionTitle,
-  StyledLink,
-  StyledSection,
-} from '../components/MovieList/MovieList.styled'; 
+import { StyledSection } from '../components/MovieList/MovieList.styled';                              
+import MovieList from '../components/MovieList/MovieList';
 
 const Movies = () => {
   const [movies, setMovies] = useState([]);
   const [searchParams, setSearchParams] = useSearchParams();
-  const location = useLocation();
 
   useEffect(() => {
-    const query = searchParams.get('query') ?? ''; 
+    const query = searchParams.get('query') ?? '';
     if (!query) return;
 
     const getMovie = async () => {
@@ -27,7 +21,7 @@ const Movies = () => {
         if (results.length === 0) {
           toast.dismiss(); 
           toast.error('No movies found');
-          setMovies([]);
+          setMovies([]); 
         } else {
           setMovies(results); 
         }
@@ -47,20 +41,9 @@ const Movies = () => {
   return (
     <main>
       <StyledSection>
-        <SectionTitle>Movies Page</SectionTitle>
+      <MovieList movies={movies} title="Movies Page" />
 
         <SearchMovies onSubmit={handleSubmit} /> 
-
-        <List>
-          {movies.map(movie => (
-            <ListItem key={movie.id}>
-
-              <StyledLink to={`/movies/${movie.id}`} state={{ from: location }}>
-                {movie.title}
-              </StyledLink>
-            </ListItem>
-          ))}
-        </List>
       </StyledSection>
     </main>
   );

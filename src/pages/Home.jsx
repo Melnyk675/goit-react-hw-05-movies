@@ -1,20 +1,20 @@
 import { useEffect, useState } from 'react';
 import { fetchTrendMovies } from '../services/api';
-import MovieList from 'components/MovieList/MovieList'; 
+import MovieList from '../components/MovieList/MovieList'; 
 import { LoadingIndicator } from 'components/SharedLayout/LoadingDots'; 
 
 const Home = () => {
-  const [trendingMovies, setTrendingMovies] = useState([]);
+  const [movies, setMovies] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(false);
 
   useEffect(() => {
-    const fetchTrendingMovies = async () => {
+    const fetchMovies = async () => {
       try {
         setError(false);
         setIsLoading(true);
         const { results } = await fetchTrendMovies();
-        setTrendingMovies(results); 
+        setMovies(results); 
       } catch (error) {
         setError(true);
       } finally {
@@ -22,7 +22,7 @@ const Home = () => {
       }
     };
 
-    fetchTrendingMovies();
+    fetchMovies();
   }, []);
 
   return (
@@ -34,7 +34,7 @@ const Home = () => {
           Sorry, we could not fetch the trending movies. Please try again later.
         </p>
       ) : (
-        <MovieList trendingMovies={trendingMovies} />
+        <MovieList movies={movies} title="Trending Today"/>
       )}
     </>
   );
